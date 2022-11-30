@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.train.modules.generator.dao.SiteInfoDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.train.modules.business.site.entity.SiteInfoEntity" id="siteInfoMap">
+        <result property="uuid" column="uuid"/>
+        <result property="sendUserId" column="send_user_id"/>
+        <result property="content" column="content"/>
+        <result property="type" column="type"/>
+        <result property="acceptUserId" column="accept_user_id"/>
+        <result property="sendDate" column="send_date"/>
+        <result property="invalidDate" column="invalid_date"/>
+    </resultMap>
+
+
+</mapper>

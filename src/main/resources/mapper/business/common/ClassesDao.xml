@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.train.modules.business.classes.dao.ClassesDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.train.modules.business.classes.entity.ClassesEntity" id="classMap">
+        <result property="uuid" column="uuid"/>
+        <result property="className" column="class_name"/>
+        <result property="startDate" column="start_date"/>
+        <result property="endDate" column="end_date"/>
+        <result property="status" column="status"/>
+        <result property="creater" column="creater"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updater" column="updater"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="remark" column="remark"/>
+        <result property="deleteFlag" column="delete_flag"/>
+    </resultMap>
+    <insert id="addStudent2Class" >
+        insert into class_student (class_id,user_id,delete_flag) values
+        <foreach collection="studentUuids" item="item" index="index"
+                 open="(" close=")" separator=",">
+                  #{classUuid},#{item},0
+        </foreach>
+    </insert>
+    <select id="searchClassStudentStudent" parameterType="java.util.Map" resultType="java.util.Map" >
+         select * from class_student where 1=1 and delete_flag = 0
+         <if test="class_id !=null ">
+             and class_id = #{class_id}
+         </if>
+         <if test="user_id !=null ">
+             and user_id = #{user_id}
+         </if>
+    </select>
+    <delete id="delStudentFromClass">
+        delete from class_student where class_id=#{classUuid} and user_id in
+        <foreach collection="studentUuids" item="item" index="index"
+                 open="(" close=")" separator=",">
+                  #{item}
+        </foreach>
+    </delete>
+    <select id="getListByStudentId" parameterType="String" resultMap="classMap" useCache="false" flushCache="true">
+       select * from classes where delete_flag=0 and uuid in (select class_id from class_student where user_id=#{studentId} and delete_flag=0) and delete_flag=0 and #{date}=#{date}
+        <if test="className !=null and className !='' ">
+            AND class_name like #{className}
+        </if>
+    </select>
+</mapper>

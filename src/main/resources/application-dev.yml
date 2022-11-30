@@ -1,0 +1,89 @@
+data:
+    template:
+        path: F:/workspace/myself/train/server/data/template
+    file:
+        path: F:/workspace/myself/train/server/data/file
+    trans2mp4:
+        path: F:/workspace/myself/train/server/data/trans2mp4
+spring:
+    datasource:
+        type: com.alibaba.druid.pool.DruidDataSource
+        druid:
+            driver-class-name: com.mysql.jdbc.Driver
+            url: jdbc:mysql://localhost:3306/train?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false
+            username: root
+            password: root
+            initial-size: 10
+            max-active: 100
+            min-idle: 10
+            max-wait: 60000
+            pool-prepared-statements: true
+            max-pool-prepared-statement-per-connection-size: 20
+            time-between-eviction-runs-millis: 60000
+            min-evictable-idle-time-millis: 300000
+            #Oracle需要打开注释
+            #validation-query: SELECT 1 FROM DUAL
+            test-while-idle: true
+            test-on-borrow: false
+            test-on-return: false
+            stat-view-servlet:
+                enabled: true
+                url-pattern: /druid/*
+                #login-username: admin
+                #login-password: admin
+            filter:
+                stat:
+                    log-slow-sql: true
+                    slow-sql-millis: 1000
+                    merge-sql: false
+                wall:
+                    config:
+                        multi-statement-allow: true
+    mail:
+        host: smtp.163.com
+        port: 465
+        protocol: smtp
+        default-encoding: utf-8
+        username: 17710557864@163.com
+        password: HJAMOHOVNDJEVHFJ
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: false
+                        required: false
+                    socketFactory:
+                        class: javax.net.ssl.SSLSocketFactory
+                        fallback: false
+#访问OSS的域名
+aliyun:
+    endpoint: http://oss-cn-beijing.aliyuncs.com
+    accessKeyId: LTAI5tCqSoqwzwdRACtd47pr
+    accessKeySecret: x0u5wNd0TWbBHHEAYBdYq0raiojqbz
+    bucketName: auto-train
+    video:
+        filehost: video
+    image:
+        filehost: image
+    ppt:
+        filehost: ppt
+    excel:
+        filehost: excel
+    word:
+        filehost: word
+    pdf:
+        filehost: pdf
+    other:
+        filehost: other
+#亚马逊相关配置
+aws:
+    accessKey: AKIA4WFN6OWKU6GXO55Q
+    secretKey: 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
+    bucketName: wetechmedia
+
+tenant:
+    exclusion: qrtz_simprop_triggers,qrtz_triggers,question_park,question_park_content,schedule_job,schedule_job_log,sys_captcha,sys_config,sys_dict,sys_log,sys_menu,sys_oss,sys_role,sys_role_menu,sys_user,sys_user_role,sys_user_token,tb_user,company,administrators,organization
+user:
+    active:
+        url: http://www.good-elearning.com/#/active/

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.train.modules.business.certificateinfo.dao.CertificateInfoDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.train.modules.business.certificateinfo.entity.CertificateInfoEntity" id="certificateInfoMap">
+        <result property="uuid" column="uuid"/>
+        <result property="certificateName" column="certificate_name"/>
+        <result property="courseId" column="course_id"/>
+        <result property="creater" column="creater"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updater" column="updater"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+    <select id="getCertificateInfoEntityByUser" parameterType="String" resultMap="certificateInfoMap">
+       select v.* from (select a.uuid,a.certificate_name,case when b.create_date is not null then b.create_date else  a.create_date end as create_date,
+       a.creater,a.updater,a.update_date,a.remark from certificate_info a,
+       (select distinct certificate_uuid,min(create_date) as create_date from  certificate_student_info where user_id=#{userId} and delete_flag=0 group by certificate_uuid ) b 
+       where a.delete_flag=0 and a.uuid = b.certificate_uuid) v  order by v.create_date desc
+    </select>
+</mapper>

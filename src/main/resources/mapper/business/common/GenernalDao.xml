@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.train.modules.business.genernal.dao.GenernalMapper">
+
+	
+<select id="getWeekGenerinfos" resultType="java.util.HashMap" useCache="false" flushCache="true">
+   SELECT
+	sum( a.learn_time ) as learn_time,
+a.days 
+FROM
+	( SELECT CAST(online_time AS SIGNED) as learn_time, DATE_FORMAT( date_time, '%Y-%m-%d' ) 
+	days FROM student_study_record_day WHERE  date_time > #{startTime} AND user_id = #{userId} and #{date}=#{date} )  a
+GROUP BY
+a.days
+</select>
+<select id="getWeekGenerinfosByClass" resultType="java.util.HashMap" useCache="false" flushCache="true">	
+	SELECT
+	r.online_time as learn_time,
+	r.user_id,
+	r.date_time,
+	c.course_name 
+FROM
+	student_study_record r,
+	course c 
+WHERE 
+	r.course_id = c.uuid  and r.user_id=#{userId} and #{date}=#{date}
+	AND r.date_time > #{startTime} order by r.date_time desc limit 5
+	</select>
+<select id="getTotalLeantimeAndCoursetime" resultType="java.util.HashMap" useCache="false" flushCache="true">	
+	SELECT
+	sum(r.online_time) as totalOnlineTime,
+	sum(r.course_total_time) as totalCourselineTime
+FROM
+	student_study_record r
+WHERE 
+     r.user_id=#{userId}
+	</select>
+</mapper>

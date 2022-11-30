@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.train.modules.business.paper.dao.ExamPaperInfosDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.train.modules.business.paper.entity.ExamPaperInfosEntity" id="examPaperInfosMap">
+        <result property="uuid" column="uuid"/>
+        <result property="examPaperName" column="exam_paper_name"/>
+        <result property="passScore" column="pass_score"/>
+        <result property="exmaTimeLimit" column="exma_time_limit"/>
+        <result property="examMaxNum" column="exam_max_num"/>
+        <result property="creater" column="creater"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updater" column="updater"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+    <resultMap type="io.train.modules.business.paper.entity.ExamPaperInfosEntity" id="examPaperInfosUserMap">
+        <result property="uuid" column="uuid"/>
+        <result property="examPaperName" column="exam_paper_name"/>
+        <result property="passScore" column="pass_score"/>
+        <result property="exmaTimeLimit" column="exma_time_limit"/>
+        <result property="examMaxNum" column="exam_max_num"/>
+        <result property="creater" column="creater"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updater" column="updater"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="maxScore" column="max_score"/>
+        <result property="examNum" column="exam_num"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+    <select id="listByUser" parameterType="String" resultMap="examPaperInfosUserMap" useCache="false" flushCache="true">
+    select a.*,b.max_score,b.exam_num from (select * from exam_paper_infos where subject in 
+        	(select course_type from class_course where class_id in (SELECT class_id FROM class_student WHERE user_id =  #{userId} and delete_flag=0) 
+        	 and (delete_flag is null or delete_flag=0 or delete_flag='0')
+        	 union all 
+        	 select uuid from course_type where parent_course_type in(
+        	 select course_type from class_course where class_id in (SELECT class_id FROM class_student WHERE user_id =  #{userId} and delete_flag=0) 
+        	 and (delete_flag is null or delete_flag=0 or delete_flag='0')) and (delete_flag is null or delete_flag=0 or delete_flag='0')) and delete_flag=0) 
+        	  a left join v_gener_user_exam_info b on a.uuid = b.exam_paper_id and b.user_id=#{userId}
+        <if test="examPaperName !=null and examPaperName !='' ">
+            AND a.exam_paper_name like #{examPaperName}
+        </if>
+        order by a.create_date desc
+        <if test="start != -1 ">
+             limit #{start},#{limit}
+        </if>
+    </select>
+    <select id="listByUserCount" resultType="java.lang.Integer">
+    select count(*) from (select * from exam_paper_infos where subject in 
+        	(select course_type from class_course where class_id in (SELECT class_id FROM class_student WHERE user_id =  #{userId} and delete_flag=0) 
+        	 and (delete_flag is null or delete_flag=0 or delete_flag='0')
+        	 union all 
+        	 select uuid from course_type where parent_course_type in(
+        	 select course_type from class_course where class_id in (SELECT class_id FROM class_student WHERE user_id =  #{userId} and delete_flag=0) 
+        	 and (delete_flag is null or delete_flag=0 or delete_flag='0')) and (delete_flag is null or delete_flag=0 or delete_flag='0')) and delete_flag=0) 
+        	  a left join v_gener_user_exam_info b on a.uuid = b.exam_paper_id and b.user_id=#{userId} 
+        <if test="examPaperName !=null and examPaperName !='' ">
+            AND a.exam_paper_name like #{examPaperName}
+        </if>
+    </select>
+    <select id="listByClassId" parameterType="String" resultMap="examPaperInfosMap" useCache="false" flushCache="true" >
+    SELECT
+	* 
+FROM
+	exam_paper_infos 
+WHERE
+	SUBJECT IN (
+	SELECT DISTINCT
+		uuid 
+	FROM
+		course_type 
+	WHERE
+		parent_course_type IN (
+		SELECT course_type FROM class_course WHERE class_id = #{classId} AND class_course.tenant_id = 16 AND (delete_flag is null or delete_flag=0 or delete_flag='0')
+		)   and delete_flag=0
+		union all
+		SELECT course_type FROM class_course WHERE class_id = #{classId} AND class_course.tenant_id = 16  AND (delete_flag is null or delete_flag=0 or delete_flag='0') 
+	)  
+	AND exam_paper_infos.tenant_id = 16 and delete_flag ='0'  and #{date}=#{date}
+    </select>
+
+</mapper>

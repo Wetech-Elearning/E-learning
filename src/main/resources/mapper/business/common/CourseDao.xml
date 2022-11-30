@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.train.modules.business.course.dao.CourseDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.train.modules.business.course.entity.CourseEntity" id="courseMap">
+        <result property="uuid" column="uuid"/>
+        <result property="courseName" column="course_name"/>
+        <result property="courseIntroduction" column="course_introduction"/>
+        <result property="relatedCourseType" column="related_course_type"/>
+        <result property="serial" column="serial"/>
+        <result property="fileType" column="file_type"/>
+        <result property="fileId" column="file_id"/>
+        <result property="fileUrl" column="file_url"/>
+        <result property="totalTime" column="total_time"/>
+        <result property="examPaperId" column="exam_paper_id"/>
+        <result property="status" column="status"/>
+        <result property="creater" column="creater"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updater" column="updater"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="remark" column="remark"/>
+        <result property="deleteFlag" column="delete_flag"/>
+    </resultMap>
+    
+     <resultMap type="io.train.modules.business.course.entity.CourseEntity" id="courseRecordMap">
+        <result property="uuid" column="uuid"/>
+        <result property="courseName" column="course_name"/>
+        <result property="courseIntroduction" column="course_introduction"/>
+        <result property="relatedCourseTypeId" column="related_course_type_id"/>
+        <result property="relatedCourseType" column="related_course_type"/>
+        <result property="serial" column="serial"/>
+        <result property="fileType" column="file_type"/>
+        <result property="fileId" column="file_id"/>
+        <result property="fileUrl" column="file_url"/>
+        <result property="totalTime" column="total_times"/>
+        <result property="examPaperId" column="exam_paper_id"/>
+        <result property="examPaperName" column="exam_paper_name"/>
+        <result property="status" column="status"/>
+        <result property="statusLabel" column="status_label"/>
+        <result property="creater" column="creater"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updater" column="updater"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="remark" column="remark"/>
+        <result property="deleteFlag" column="delete_flag"/>
+        <result property="certificateId" column="certificate_id"/>
+        <result property="certificateName" column="certificate_name"/>
+        <result property="percent" column="percent"/>
+        <result property="readTime" column="learn_time"/>
+        <result property="onlineTime" column="online_time"/>
+        <result property="isFinished" column="is_finished"/>
+    </resultMap>
+    <select id="getCourseEntityByClassId" resultMap="courseRecordMap" useCache="false" flushCache="true">
+         select a.*,b.courseName,b.courseIntroduction,b.serial from class_course a,course b where a.course_id = b.uuid and a.class_id = #{classid} and a.delete_flag=0 and b.delete_flag=0 and #{date}=#{date} 
+    </select>
+    <select id="getPageByStudentCouseType" resultMap="courseRecordMap" useCache="false" flushCache="true">
+       select a.*,b.online_time,b.learn_time,case when b.course_total_time is not  null and b.course_total_time!='' then b.course_total_time else a.total_time end as total_times ,b.is_finished from course a 
+       left join (select * from student_study_record where user_id=#{studentId}  and delete_flag=0) b  
+       on a.uuid = b.course_id 
+       where a.related_course_type_id=#{courseType} and #{date}=#{date}
+        and a.status='876ff807b5c84374b101be71ba7efd3f'
+        and a.delete_flag = 0
+    </select>
+    
+    <select id="getPageByStudentCourseId" resultMap="courseRecordMap" useCache="false" flushCache="true">
+       select a.*,b.online_time,b.learn_time,case when b.course_total_time is not  null and b.course_total_time!='' then b.course_total_time else a.total_time end as total_times ,b.is_finished from course a 
+       left join (select * from student_study_record where user_id=#{studentId}  and delete_flag=0) b  
+       on a.uuid = b.course_id 
+       where a.uuid=#{uuid} and #{date}=#{date}
+    </select>
+
+</mapper>

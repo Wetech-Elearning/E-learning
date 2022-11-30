@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.train.modules.generator.dao.ExamInfoDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.train.modules.business.exam.entity.ExamInfoEntity" id="examInfoMap">
+        <result property="uuid" column="uuid"/>
+        <result property="examQuestionName" column="exam_question_name"/>
+        <result property="relatedExamId" column="related_exam_id"/>
+        <result property="questionType" column="question_type"/>
+        <result property="aOption" column="a_option"/>
+        <result property="bOption" column="b_option"/>
+        <result property="cOption" column="c_option"/>
+        <result property="dOption" column="d_option"/>
+        <result property="greenOption" column="green_option"/>
+        <result property="redOption" column="red_option"/>
+        <result property="correctOption" column="correct_option"/>
+    </resultMap>
+
+
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.train.modules.generator.dao.JudgeQuestionDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.train.modules.business.question.entity.JudgeQuestionEntity" id="judgeQuestionMap">
+        <result property="questionid" column="questionId"/>
+        <result property="subject" column="subject"/>
+        <result property="question" column="question"/>
+        <result property="answer" column="answer"/>
+        <result property="analysis" column="analysis"/>
+        <result property="score" column="score"/>
+        <result property="level" column="level"/>
+        <result property="section" column="section"/>
+    </resultMap>
+
+
+</mapper>

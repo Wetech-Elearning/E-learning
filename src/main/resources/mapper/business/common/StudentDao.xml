@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.train.modules.business.student.dao.StudentDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.train.modules.business.student.entity.StudentEntity" id="studentMap">
+        <result property="uuid" column="uuid"/>
+        <result property="userName" column="user_name"/>
+        <result property="userMobile" column="user_mobile"/>
+        <result property="relatedCompany" column="related_company"/>
+        <result property="relatedDepartment" column="related_department"/>
+        <result property="relatedOffice" column="related_office"/>
+        <result property="sex" column="sex"/>
+        <result property="age" column="age"/>
+        <result property="creater" column="creater"/>
+        <result property="createDate" column="create_date"/>
+        <result property="updater" column="updater"/>
+        <result property="updateDate" column="update_date"/>
+        <result property="remark" column="remark"/>
+        <result property="deleteFlag" column="delete_flag"/>
+    </resultMap>
+    <select id="getUserListByClassId" resultMap="studentMap" useCache="false" >
+        select * from student where uuid in (
+             select user_id from 
+               class_student 
+               where 
+               class_id =#{uuid} and delete_flag=0
+               ) 
+               and delete_flag=0 and #{date}=#{date}
+    </select>
+
+</mapper>

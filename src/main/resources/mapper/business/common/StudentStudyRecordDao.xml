@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.train.modules.business.record.dao.StudentStudyRecordDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="io.train.modules.business.record.entity.StudentStudyRecordEntity" id="studentStudyRecordMap">
+    </resultMap>
+    <insert id="asyncStudyRecord" parameterType="io.train.modules.business.record.entity.StudentStudyRecordEntity">
+        insert into student_study_record_day(user_id,course_id,online_time,delete_flag,date_time) values(#{userId},#{courseId},5,'0',#{dateTime})
+        ON DUPLICATE KEY UPDATE online_time=online_time+5
+    </insert>
+
+</mapper>

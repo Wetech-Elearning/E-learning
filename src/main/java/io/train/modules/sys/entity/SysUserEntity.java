@@ -1,0 +1,116 @@
+
+package io.train.modules.sys.entity;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import io.train.common.validator.group.AddGroup;
+import io.train.common.validator.group.UpdateGroup;
+import lombok.Data;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * 系统用户
+ *
+ * @author Mark sunlightcs@gmail.com
+ */
+@Data
+@TableName("sys_user")
+public class SysUserEntity implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * 用户ID
+	 */
+	@TableId(type = IdType.ASSIGN_ID)
+	private Long userId;
+
+	/**
+	 * 帐户
+	 */
+	@NotBlank(message="帐户不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	private String account;
+
+	/**
+	 * 用户名
+	 */
+	@NotBlank(message="用户名不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	private String username;
+
+	/**
+	 * 密码
+	 */
+	@NotBlank(message="密码不能为空", groups = AddGroup.class)
+	private String password;
+
+	/**
+	 * 盐
+	 */
+	private String salt;
+
+	/**
+	 * 邮箱
+	 */
+	@NotBlank(message="邮箱不能为空", groups = {AddGroup.class, UpdateGroup.class})
+	@Email(message="邮箱格式不正确", groups = {AddGroup.class, UpdateGroup.class})
+	private String email;
+
+	/**
+	 * 手机号
+	 */
+	private String mobile;
+
+	/**
+	 * 状态  0：禁用   1：正常
+	 */
+	private Integer status;
+
+	/**
+	 * 角色ID列表
+	 */
+	@TableField(exist=false)
+	private List<Long> roleIdList;
+
+	/**
+	 * 创建者ID
+	 */
+	private Long createUserId;
+
+	/**
+	 * 创建时间
+	 */
+	private Date createTime;
+
+	/**
+	 * 所属企业
+	 */
+	private String  company;
+
+	/**
+	 * 激活码
+	 */
+	private String  code;
+
+	/**
+	 * 头像
+	 */
+	private String  avatar;
+
+	/**
+	 * 简介
+	 */
+	private String  introduction;
+	
+	private String relateUserId;
+
+	/**
+	 * 租户
+	 */
+	private Long tenantId;
+}
